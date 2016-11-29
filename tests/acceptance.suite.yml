@@ -1,0 +1,17 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+        - \Helper\Acceptance
+    config:
+        WebDriver:
+            url: 'http://bravo.atwix.com:1000/mage21/'
+            browser: phantomjs
+            window_size: 1920x1310
+            capabilities:
+              webStorageEnabled: true
