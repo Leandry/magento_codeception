@@ -1,5 +1,6 @@
 <?php
 use \AcceptanceTester as AT;
+use Page\Product as Product;
 
 class AddProductToCartCest
 {
@@ -18,72 +19,72 @@ class AddProductToCartCest
 
         $I->amGoingTo('Open Home page');
         $I->amOnPage('/');
-        $I->waitForElement('header.page-header strong.logo');
-        $I->seeElement('header.page-header strong.logo img');
+        $I->waitForElement(Product::$pageLogo);
+        $I->seeElement(Product::$pageLogo.' img');
     }
     public function addSimple(AT $I)
     {
         $I->wantTo('Add simple product to the cart');
-        $I->amOnPage('/aim-analog-watch.html');//open product page
-        $I->waitForElement('h1.page-title'); // wait and check product name
-        $I->see('Aim Analog Watch', 'h1.page-title');
+        $I->amOnPage(Product::$simpleURL);
+        $I->waitForElement(Product::$pageTitle); // wait and check product name
+        $I->see(Product::$productName, Product::$pageTitle);
 
-        $I->seeElement('div.breadcrumbs'); //breadcrumbs
-        $I->seeElement('#product-price-36');//product price
-        $I->see('In stock','div.stock.available');//In stock
+        $I->seeElement(Product::$breadcrumbs);
+        $I->seeElement(Product::$simplePrice);
+        $I->see('In stock', Product::$inStock);
 
-        $I->seeElement('#qty');//Qty input
-        $I->fillField('#qty', 2); // change qty to 2
+        $I->seeElement(Product::$qty);
+        $I->fillField(Product::$qty, 2); // change qty to 2
 
-        $I->click('#product-addtocart-button');//click on "add to cart" button
+        $I->click(Product::$addCartBtn);//click on "add to cart" button
 
-        $I->waitForElement('div.message-success');
-        $I->see('You added Aim Analog Watch to your shopping cart.', 'div.message-success');
-        $I->waitForElementVisible('span.counter.qty');
-        $I->see(2, 'span.counter-number');
+        $I->waitForElement(Product::$successMsg);
+        $I->see('You added '.Product::$productName.' to your shopping cart.', Product::$successMsg);
+        $I->waitForElementVisible(Product::$qtyCounter);
+        $I->see(2, Product::$numberCounter);
 
-        $I->wantTo('Open and checkShopping cart');
-        $I->amOnPage('/checkout/cart/');//open product page
-        $I->seeInCurrentUrl('/checkout/cart/');
-        $I->waitForElement('h1.page-title');
-        $I->see('Shopping cart', 'h1.page-title');
+        $I->wantTo('Open and check Shopping cart');
+        $I->amOnPage(Product::$shoppingCartURL);
+        $I->seeInCurrentUrl(Product::$shoppingCartURL);
+        $I->waitForElement(Product::$pageTitle);
+        $I->see('Shopping cart', Product::$pageTitle);
 
-        $I->seeElement('tbody.cart.item');
-        $I->seeInField('//*[@id="shopping-cart-table"]/tbody/tr[1]/td[3]/div/div/input', 2);//check if qty = 2 for the first element in tbody
+        $I->seeElement(Product::$cartItem);
+        $I->seeInField(Product::$cartQtyFirstItem, 2);//check if qty = 2 for the first element in tbody
 
     }
     public function addConfigProduct(AT $I){
         $I->wantTo('Add Configurable product to the cart');
-        $I->amOnPage('/deirdre-relaxed-fit-capri.html');//open product page
-        $I->waitForElement('h1.page-title'); // wait and check product name
-        $I->see('Deirdre Relaxed-Fit Capri', 'h1.page-title');
+        $I->amOnPage(Product::$configurableURL);
+        $I->waitForElement(Product::$pageTitle);
+        $I->see(Product::$configProductName, Product::$pageTitle);
 
-        $I->seeElement('div.breadcrumbs'); //breadcrumbs
-        $I->seeElement('#product-options-wrapper');
-
-
-        $I->click('//*[@id="product-options-wrapper"]/div/div/div[1]/div/div[1]');
-        $I->click('//*[@id="product-options-wrapper"]/div/div/div[2]/div/div[2]');
-        $I->see('Blue', 'div.swatch-attribute.color span.swatch-attribute-selected-option');
-        $I->see('29', 'div.swatch-attribute.size  span.swatch-attribute-selected-option');
-        $I->see('In stock','div.stock.available');//In stock
-
-        $I->click('#product-addtocart-button');//click on "add to cart" button
-
-        $I->waitForElement('div.message-success');
-        $I->see('You added Deirdre Relaxed-Fit Capri to your shopping cart.', 'div.message-success');
-        $I->waitForElementVisible('span.counter.qty');
-        $I->see(1, 'span.counter-number');
+        $I->seeElement(Product::$breadcrumbs);
+        $I->seeElement(Product::$configOptions);
 
 
-        $I->wantTo('Open and checkShopping cart');
-        $I->amOnPage('/checkout/cart/');//open product page
-        $I->seeInCurrentUrl('/checkout/cart/');
-        $I->waitForElement('h1.page-title');
-        $I->see('Shopping cart', 'h1.page-title');
+        $I->click(Product::$colorOption);
+        $I->click(Product::$sizeOption);
+        $I->see(Product::$colorOptionName, Product::$colorOptionSelected);
+        $I->see(Product::$sizeOptionName, Product::$sizeOptionSelected);
+        $I->see('In stock',Product::$inStock);
 
-        $I->seeElement('tbody.cart.item');
-        $I->see('Blue', '#shopping-cart-table  tbody.cart.ite,  tr.item-info  td.col.item   dl.item-options dd');
-        $I->see('29', '#shopping-cart-table  tbody.cart.ite,  tr.item-info  td.col.item   dl.item-options dd');
+        $I->click(Product::$addCartBtn);
+
+        $I->waitForElement(Product::$successMsg);
+        $I->see('You added '.Product::$configProductName.' to your shopping cart.', Product::$successMsg);
+        $I->waitForElementVisible(Product::$qtyCounter);
+        $I->see(1, Product::$numberCounter);
+
+
+        $I->wantTo('Open and check Shopping cart');
+        $I->amOnPage(Product::$shoppingCartURL);
+        $I->seeInCurrentUrl(Product::$shoppingCartURL);
+        $I->waitForElement(Product::$pageTitle);
+        $I->see('Shopping cart', Product::$pageTitle);
+
+        $I->seeElement(Product::$cartQtyFirstItem);
+        $I->see(Product::$colorOptionName, Product::$cartProductOption);
+        $I->see(Product::$sizeOptionName, Product::$cartProductOption);
     }
 }
